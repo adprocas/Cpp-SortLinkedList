@@ -24,6 +24,8 @@ int sortLinkedList(LinkedList<int>* h) {
 
 			p->setData(headData);
 			head->setData(prevData);
+
+			head = p->next;
 		}
 		else {
 			head = head->next;
