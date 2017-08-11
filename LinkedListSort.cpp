@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 #include "LinkedList.hpp"
 
 using namespace std;
@@ -11,35 +13,17 @@ int sortLinkedList(LinkedList<int>* h) {
 	while (head != NULL) {
 		
 		if (head->prev != NULL && head->prev->getData() > head->getData()) {
-			//handle previous previous
-			if (head->prev->prev != NULL) {
-				head->prev->prev->next = head;
-			}
-
 			LinkedList<int>* p = head->prev;
-			LinkedList<int>* n = head->next;
 
-			//handle head
-			//prev
-			head->prev = head->prev->prev;
-			//next
-			head->next = p;
-
-			//handle previous
-			//next
-			p->next = n;
-			//prev
-			p->prev = head;
-
-			//handle next
-			if (n != NULL) {
-				n->prev = p;
+			while (p->prev != NULL && p->prev->getData() > head->getData()) {
+				p = p->prev;
 			}
 
-			if (p->prev != NULL)
-				head = p->prev;
-			else 
-				head = p;
+			int prevData = p->getData();
+			int headData = head->getData();
+
+			p->setData(headData);
+			head->setData(prevData);
 		}
 		else {
 			head = head->next;
@@ -55,14 +39,18 @@ int sortLinkedList(LinkedList<int>* h) {
 	return iterations;
 }
 
+const int iters = 100;
+
 int main() {
 	LinkedList<int> *ll = new LinkedList<int>(2);
 
-	ll->add(2);
-	ll->add(2);
-	ll->add(0);
-	ll->add(1);
-	ll->add(0);
+	srand((unsigned)time(0));
+
+	for (int i = 0; i < iters; ++i) {
+		int r = rand() % 10000;
+
+		ll->add(r);
+	}
 
 	LinkedList<int> *head = ll;
 
