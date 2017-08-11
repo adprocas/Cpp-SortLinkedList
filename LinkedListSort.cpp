@@ -12,20 +12,22 @@ int sortLinkedList(LinkedList<int>* h) {
 
 	while (head != NULL) {
 		
-		if (head->prev != NULL && head->prev->getData() > head->getData()) {
-			LinkedList<int>* p = head->prev;
+		if (head->prev != NULL) {
+			while (head->prev->getData() > head->getData()) {
+				LinkedList<int>* p = head->prev;
 
-			while (p->prev != NULL && p->prev->getData() > head->getData()) {
-				p = p->prev;
+				int prevData = p->getData();
+				int headData = head->getData();
+
+				p->setData(headData);
+				head->setData(prevData);
+
+				if (p->prev != NULL) {
+					head = p;
+				}
 			}
-
-			int prevData = p->getData();
-			int headData = head->getData();
-
-			p->setData(headData);
-			head->setData(prevData);
-
-			head = p->next;
+			
+			head = head->next;
 		}
 		else {
 			head = head->next;
